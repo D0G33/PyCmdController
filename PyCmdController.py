@@ -3,9 +3,11 @@ import win32gui
 import os
 import pyautogui
 from time import sleep
+import atexit
 
 
 #list all windows list
+pythonPath = os.getcwd()
 
 def enum_window_titles():
     def callback(handle, data):
@@ -35,6 +37,7 @@ class cmdObject:
         os.system('start "' + name + '" cmd')
         self.name = name
         self.window_handle = self.collectHandle(name)
+        atexit.register(self.close)
 
     def getRect(self):
         #Sourced Here: https://stackoverflow.com/questions/7142342/get-window-position-size-with-python
@@ -90,38 +93,34 @@ class cmdObject:
         self.cmd("title "+self.name)
         self.invisible()
 
+    def out(self,cmd,*args):
+        #run command with output directed
+        self.activate()
+        self._cmd(cmd+" > C:\\Temp\\command_out.txt")
+        for i in args:
+            self._cmd(i + " >> C:\\Temp\\command_out.txt")
+        self.invisible()
+
+        output = open('C:\\Temp\\command_out.txt','r')
+        raw = output.readlines()
+        for i in range(len(raw)):
+            raw[i] = raw[i].replace("\n",'')
+        output.close()
+
+        os.system("del C:\\Temp\\command_out.txt")
+        return raw
+
 def main():
     user,password = 'pythonAdmin', 'PythonPassword'
     testObj = cmdObject("the correct window name")
     testObj.elevate(user,password)
     testObj.invisible()
     testObj.activate()
-    testObj.cmd(None,
-                "echo Hacking into the white house.",
-                "cls",
-                "echo Hacking into the white house..",
-                "cls",
-                "echo Hacking into the white house...",
-                "cls",
-                "echo Hacking into the white house.",
-                "cls",
-                "echo Hacking into the white house..",
-                "cls",
-                "echo Hacking into the white house...",
-                "cls",
-                "echo Hacking into the white house.",
-                "cls",
-                "echo Hacking into the white house..",
-                "cls",
-                "echo Hacking into the white house...",
-                "cls",
-                "echo Hacking into the white house.",
-                "cls",
-                "echo Hacking into the white house..",
-                "cls",
-                "echo Hacking into the white house..."
-                )
+    testObj.cmd("cd C:\\Temp")
+    print(testObj.out("echo Hello",
+                      "echo World"))
     testObj.show()
+
 
 if __name__ == '__main__':
     main()
