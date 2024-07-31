@@ -96,6 +96,7 @@ class cmdObject:
     def out(self,cmd,*args):
         #run command with output directed
         self.activate()
+        os.system("mkdir C:\\Temp")
         self._cmd(cmd+" > C:\\Temp\\command_out.txt")
         for i in args:
             self._cmd(i + " >> C:\\Temp\\command_out.txt")
