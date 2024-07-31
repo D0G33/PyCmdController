@@ -38,6 +38,7 @@ class cmdObject:
         self.name = name
         self.window_handle = self.collectHandle(name)
         atexit.register(self.close)
+        self.tempFilePath = "C:\\Temp"
 
     def getRect(self):
         #Sourced Here: https://stackoverflow.com/questions/7142342/get-window-position-size-with-python
@@ -58,7 +59,6 @@ class cmdObject:
         pyautogui.click(_x + 50, _y + 50)
 
     def hide(self):
-
         win32gui.ShowWindow(self.window_handle, win32con.SW_MINIMIZE)
 
     def show(self):
@@ -86,8 +86,11 @@ class cmdObject:
 
     def close(self):
         win32gui.PostMessage(self.window_handle, win32con.WM_CLOSE, 0, 0)
-    def elevate(self, user, password, domain=os.environ['COMPUTERNAME']):
-        self.cmd("runas /user:"+user+" cmd", password)
+    def elevate(self, user, password, domain=os.environ['COMPUTERNAME'],prefix=''):
+        if prefix != '':
+            self.cmd("runas /user:"+prefix+"\\"+user+" cmd", password)
+        else:
+            self.cmd("runas /user:"+user+" cmd", password)
         self.close()
         self.window_handle = self.collectHandle("cmd "+"(running as "+domain+"\\"+user+")")
         self.cmd("title "+self.name)
@@ -96,23 +99,23 @@ class cmdObject:
     def out(self,cmd,*args):
         #run command with output directed
         self.activate()
-        os.system("mkdir C:\\Temp")
-        self._cmd(cmd+" > C:\\Temp\\command_out.txt")
+        os.system("mkdir "+self.tempFilePath)
+        self._cmd(cmd+" > "+self.tempFilePath+"\\command_out.txt")
         for i in args:
-            self._cmd(i + " >> C:\\Temp\\command_out.txt")
+            self._cmd(i + " >> "+self.tempFilePath+"\\command_out.txt")
         self.invisible()
 
-        output = open('C:\\Temp\\command_out.txt','r')
+        output = open(self.tempFilePath+'\\command_out.txt','r')
         raw = output.readlines()
         for i in range(len(raw)):
             raw[i] = raw[i].replace("\n",'')
         output.close()
 
-        os.system("del C:\\Temp\\command_out.txt")
+        os.system("del "+self.tempFilePath+"\\command_out.txt")
         return raw
 
 def main():
-    user,password = 'pythonAdmin', 'PythonPassword'
+    user,password = 'pythonAdmin', 'PythonPasswordExtraSecure@'
     testObj = cmdObject("the correct window name")
     testObj.elevate(user,password)
     testObj.invisible()
