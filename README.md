@@ -2,15 +2,15 @@
 
 ###
 
-<p align="center">------------------------------------------------------------------------------------------------------------------------------------------------------</p>
+<p align="center">______________________________________________________________________________________________________________________________________________________</p>
 
 ###
 
-<p align="left">A simple and powerful script for creating and controlling CMD prompts. <br><br><br>What it can do:<br><br>- Elevate CMD Prompts<br>- Type over read only inputs. (No more pesky password prompts)<br>- Remember Console History (cd actually works :0)<br>- Anything else you can do by typing into a command prompt yourself.<br><br>What it cant do:<br><br>- Do any of this descretely<br>- Type to hidden or minimized windows<br>- Natively Get Outputs (no stdout access, praise temp files)</p>
+<p align="left">A simple and powerful script for creating and controlling CMD prompts. <br><br><br>What it can do:<br><br>_ Elevate CMD Prompts<br>_ Type over read only inputs. (No more pesky password prompts)<br>_ Remember Console History (cd actually works :0)<br>_ Anything else you can do by typing into a command prompt yourself.<br><br>What it cant do:<br><br>_ Do any of this descretely<br>_ Type to hidden or minimized windows<br>_ Natively Get Outputs (no stdout access, praise temp files)</p>
 
 ###
 
-<p align="left">_____________________________________________________________________________________________________________________________________________________________________</p>
+<p align="center">______________________________________________________________________________________________________________________________________________________</p>
 
 ###
 
@@ -18,6 +18,8 @@
 
 ###
 
-<p align="left">_____________________________________________________________________________________________________________________________________________________________________</p>
+<p align="center">______________________________________________________________________________________________________________________________________________________</p>
 
 ###
+
+<p align="center">Script Requires pywin32gui, pywin32con, and pyautogui</p>
