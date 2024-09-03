@@ -1,3 +1,5 @@
+import time
+
 import win32con
 import win32gui
 import os
@@ -82,27 +84,32 @@ class cmdObject:
             _list.pop(0)
             for i in _list:
                 self._cmd(i)
-        self.invisible()
+
 
     def close(self):
         win32gui.PostMessage(self.window_handle, win32con.WM_CLOSE, 0, 0)
+
     def elevate(self, user, password, domain=os.environ['COMPUTERNAME'],prefix=''):
         if prefix != '':
             self.cmd("runas /user:"+prefix+"\\"+user+" cmd", password)
         else:
             self.cmd("runas /user:"+user+" cmd", password)
         self.close()
-        self.window_handle = self.collectHandle("cmd "+"(running as "+domain+"\\"+user+")")
+        print(self.window_handle)
+        time.sleep(1)
+        pyautogui.write("title ElevatedCMD\n", interval=0)
+        self.window_handle = self.collectHandle("ElevatedCMD")
+        print(self.window_handle)
         self.cmd("title "+self.name)
-        self.invisible()
+
 
     def out(self,cmd,*args):
         #run command with output directed
         self.activate()
         os.system("mkdir "+self.tempFilePath)
-        self._cmd(cmd+" > "+self.tempFilePath+"\\command_out.txt")
+        self._cmd(cmd+"> "+self.tempFilePath+"\\command_out.txt")
         for i in args:
-            self._cmd(i + " >> "+self.tempFilePath+"\\command_out.txt")
+            self._cmd(i + ">> "+self.tempFilePath+"\\command_out.txt")
         self.invisible()
 
         output = open(self.tempFilePath+'\\command_out.txt','r')
@@ -115,16 +122,12 @@ class cmdObject:
         return raw
 
 def main():
-    user,password = 'pythonAdmin', 'PythonPasswordExtraSecure@'
+    user,password = 'brsmith', 'Jwxy7369_'
     testObj = cmdObject("the correct window name")
-    testObj.elevate(user,password)
-    testObj.invisible()
-    testObj.activate()
-    testObj.cmd("cd C:\\Temp")
-    print(testObj.out("echo Hello",
-                      "echo World"))
-    testObj.show()
+    testObj.elevate(user,password,domain="vab.state.ms.us",prefix="VAB")
+    testObj.cmd("echo Hello World!!!")
 
+    input()
 
 if __name__ == '__main__':
     main()
